@@ -3,66 +3,44 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 
-class Clock extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { date: new Date() };
-    }
-
-    componentDidMount() {
-        this.timerId = setInterval(() => this.tick(), 1000);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timerId);
-    }
-
-    tick() {
-        this.setState({ date: new Date() });
-    }
-
-    render() {
-        return (
-            <div>
-                <h1>Hello, world!</h1>
-                <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
-            </div>
-        );
-    }
-}
-
-class Toggle extends React.Component {
+class NameForm extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {isToggleOn: true};
+      this.state = {value: ''};
   
-      // This binding is necessary to make `this` work in the callback
+      this.handleChange = this.handleChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
       this.handleClick = this.handleClick.bind(this);
     }
   
-    handleClick = () => {
-      this.setState(prevState => ({
-        isToggleOn: !prevState.isToggleOn
-      }));
+    handleChange(event) {
+      this.setState({value: event.target.value});
+    }
+  
+    handleSubmit(event) {
+      alert('A name was submitted: ' + this.state.value);
+      event.preventDefault();
+    }
+
+    handleClick(){
+        this.setState({value: ''});
     }
   
     render() {
       return (
-        <button onClick={this.handleClick}>
-          {this.state.isToggleOn ? 'ON' : 'OFF'}
-        </button>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Name:
+            <input type="text" value={this.state.value} onChange={this.handleChange} />
+          </label>
+          <input type="submit" value="Submit" />
+          <input type="button" onClick={this.handleClick} value="Clear"/>
+        </form>
       );
     }
   }
-
-function tick() {
-    ReactDOM.render(
-        (<div>
-            <Clock />
-            <Toggle />
-        </div>),
-        document.getElementById('root')
-    );
-}
-
-setInterval(tick, 1000);
+  
+  ReactDOM.render(
+    <NameForm />,
+    document.getElementById('root')
+  );
