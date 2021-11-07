@@ -2,147 +2,67 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-function Square(props) {
-    return (
-        <button className="square"
-            onClick={props.onClick}>
-            {props.value}
-        </button>
-    );
-}
 
+class Clock extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { date: new Date() };
+    }
 
-class Board extends React.Component {
+    componentDidMount() {
+        this.timerId = setInterval(() => this.tick(), 1000);
+    }
 
-    renderSquare(i) {
-        return (
-            <Square
-                value={this.props.squares[i]}
-                onClick={() => this.props.onClick(i)}
-            />
-        );
+    componentWillUnmount() {
+        clearInterval(this.timerId);
+    }
+
+    tick() {
+        this.setState({ date: new Date() });
     }
 
     render() {
         return (
             <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+                <h1>Hello, world!</h1>
+                <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
             </div>
         );
     }
 }
 
-class Game extends React.Component {
+class Toggle extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = {
-            history: [{
-                squares: Array(9).fill(null)
-            }],
-            xIsNext: true,
-            stepNumber: 0
-        }
+      super(props);
+      this.state = {isToggleOn: true};
+  
+      // This binding is necessary to make `this` work in the callback
+      this.handleClick = this.handleClick.bind(this);
     }
-
-    handleClick(i) {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
-        const current = history[history.length - 1];
-        const squares = current.squares.slice();
-        if (calculateWinner(squares) || squares[i]) {
-            return;
-        }
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({
-            history: history.concat([{
-                squares: squares,
-            }]),
-            xIsNext: !this.state.xIsNext,
-            stepNumber: history.length
-        });
+  
+    handleClick = () => {
+      this.setState(prevState => ({
+        isToggleOn: !prevState.isToggleOn
+      }));
     }
-
-    jumpTo(turnNumber){
-        this.setState({
-            stepNumber: turnNumber,
-            xIsNext: (turnNumber % 2) === 0
-        });
-    }
-
+  
     render() {
-        const history = this.state.history;
-        const current = history[this.state.stepNumber];
-        const winner = calculateWinner(current.squares);
-
-        const moves = history.map((turnState, turnNumber) => {
-            const desc = turnNumber ? 'Turn ' + turnNumber : 'Start of game';
-            return (
-                <li key={turnNumber}>
-                    <button onClick={() => this.jumpTo(turnNumber)}>{desc}</button>
-                </li>
-            );
-        });
-
-        let status;
-        if (winner) {
-            status = winner + " wins the game!!";
-        } else {
-            status = "It is " + (this.state.xIsNext ? "X" : "O") + "'s turn"
-        }
-
-        return (
-            <div className="game">
-                <div className="game-board">
-                    <Board
-                        squares={current.squares}
-                        onClick={(i) => this.handleClick(i)}
-                    />
-                </div>
-                <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{moves}</ol>
-                </div>
-            </div>
-        );
+      return (
+        <button onClick={this.handleClick}>
+          {this.state.isToggleOn ? 'ON' : 'OFF'}
+        </button>
+      );
     }
+  }
+
+function tick() {
+    ReactDOM.render(
+        (<div>
+            <Clock />
+            <Toggle />
+        </div>),
+        document.getElementById('root')
+    );
 }
 
-// ========================================
-
-ReactDOM.render(
-    <Game />,
-    document.getElementById('root')
-);
-
-function calculateWinner(squares) {
-    const lines = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-    ];
-    for (let i = 0; i < lines.length; i++) {
-        const [a, b, c] = lines[i];
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
-        }
-    }
-    return null;
-}
+setInterval(tick, 1000);
