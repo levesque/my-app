@@ -56,7 +56,7 @@ class HandicApp extends React.Component {
             </div>
         );
     }
-}
+} // HandicApp
 
 
 class HomePage extends React.Component {
@@ -86,7 +86,28 @@ class HomePage extends React.Component {
 
         let courseDetails;
         if (this.state.selectedCourse !== "") {
-            courseDetails = <p>Should only show when course is selected</p>
+            const selectedCourse = this.props.courses[0];
+
+            const allTees = <tr>
+                <td>{selectedCourse.tee}</td>
+                <td>{selectedCourse.rating}</td>
+                <td>{selectedCourse.slope}</td>
+                <td>to do</td>
+                <td>to do</td>
+            </tr>
+
+            courseDetails = <div>
+                <table>
+                    <tr>
+                        <th>Tees</th>
+                        <th>Rating</th>
+                        <th>Slope</th>
+                        <th>Handicap</th>
+                        <th>Target</th>
+                    </tr>
+                    {allTees}
+                </table>
+            </div>
         }
 
         return (
