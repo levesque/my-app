@@ -13,22 +13,14 @@ db.version(1).stores({
     rounds: '++id, date'
 });
 
-export function CourseSelectList() {
+export function CourseSelectList(props) {
     let courses = useLiveQuery(
-        () => db.courses.toArray()
+        () => db.courses.orderBy('course').toArray()
     );
 
-    // let uniqueCourses = [...new Set(courses.map(item => item.course))];
-    // uniqueCourses = uniqueCourses.sort((a, b) => a > b ? 1 : -1);
-
-    // return <select>
-    //     {uniqueCourses?.map(course => <option key={course.name} value={course}>
-    //         {course.name}
-    //     </option>)}
-    // </select>;
-
-    return <select>
-        {courses?.map(course => <option key={course.course} value={course}>
+    return <select value="" onChange={props.onChange}>
+        <option key="blank" value="" disabled>Select a course</option>
+        {courses?.map(course => <option key={course.course} value={course.course}>
             {course.course}
         </option>)}
     </select>;

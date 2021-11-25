@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { db } from "./db";
 import { CourseSelectList } from "./db";
@@ -71,11 +71,6 @@ function HomePage(props) {
 
     const [selectedCourseName, setSelectedCourse] = useState("");
 
-    // generate select options of distinct courses
-
-    // const courseOptions = CourseSelectList;
-    const courseOptions = (<option key="blank"></option>);
-
     let courseDetails;
     // const selectedCourse = selectedCourseName !== "" ? courseOptions[0].value : courseOptions[5].value;
     // const allTees = <tr>
@@ -127,16 +122,22 @@ function HomePage(props) {
 
     };
 
-    const resetDb = () => {db.delete();}
+    const resetDb = () => { db.delete(); }
+
+    useEffect(() => {
+        console.log('in homepage useEffect ' + selectedCourseName);
+    });
+
+    const courseSelected = (e) => {
+        setSelectedCourse(e.target.value);
+    };
 
     return (
         <div>
             <button onClick={primeDb}>Insert some data</button>
             <button onClick={resetDb}>Delete all data</button>
-            <select id='courseSelect' onChange={setSelectedCourse}>
-                {courseOptions}
-            </select>
-            <CourseSelectList/>
+
+            <CourseSelectList onChange={courseSelected} />
             {courseDetails}
         </div>
     );
