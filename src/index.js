@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import { CourseList } from "./db";
+
 import './index.css';
 
 const HOME_PAGE = "Handicap";
@@ -76,8 +79,9 @@ class HomePage extends React.Component {
     render() {
 
         // generate select options of distinct courses
-        let justCourses = [...new Set(this.props.courses.map(item => item.course))];
-        justCourses = justCourses.sort((a, b) => a > b ? 1 : -1);
+        // let justCourses = [...new Set(this.props.courses.map(item => item.course))];
+        // justCourses = justCourses.sort((a, b) => a > b ? 1 : -1);
+        const justCourses = CourseList();
         var courseOptions = [];
         courseOptions.push(<option></option>);
         for (var k = 0; k < justCourses.length; k++) {
