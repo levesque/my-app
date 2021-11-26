@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { db } from "./db";
 import { CourseSelectList } from "./db";
+import { CourseTees } from "./db";
 
 import './index.css';
 
@@ -67,62 +68,53 @@ function TabButton(props) {
 
 
 function HomePage(props) {
-
-
-    const [selectedCourseName, setSelectedCourse] = useState("");
-
-    let courseDetails;
-    // const selectedCourse = selectedCourseName !== "" ? courseOptions[0].value : courseOptions[5].value;
-    // const allTees = <tr>
-    //     <td>{selectedCourse.tee}</td>
-    //     <td>{selectedCourse.rating}</td>
-    //     <td>{selectedCourse.slope}</td>
-    const allTees = <tr>
-        <td>to do</td>
-        <td>to do</td>
-        <td>to do</td>
-        <td>to do</td>
-        <td>to do</td>
-    </tr >
-
-    courseDetails = <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Tees</th>
-                    <th>Rating</th>
-                    <th>Slope</th>
-                    <th>Handicap</th>
-                    <th>Target</th>
-                </tr>
-            </thead>
-            <tbody>
-                {allTees}
-            </tbody>
-        </table>
-    </div>
-    // }
-
-    const primeDb = (e) => {
-        console.log("clickety");
+    const resetDb = () => { db.delete(); }
+    const primeDb = () => {
         const COURSES = [
-            { "course": "Possum Trot", "tee": "White", "rating": "70.4", "slope": "118" },
+            { "course": "Blue Devil", "tee": "blue", "rating": "70.6", "slope": "126" },
+            { "course": "Bootleg Gap", "tee": "blue", "rating": "69.6", "slope": "120" },
+            { "course": "Copper Point", "tee": "green", "rating": "68.9", "slope": "119" },
+            { "course": "Delacour", "tee": "Blue/White", "rating": "71", "slope": "134" },
+            { "course": "Delacour", "tee": "blue", "rating": "72.3", "slope": "135" },
+            { "course": "Dunes", "tee": "White", "rating": "69.6", "slope": "114" },
+            { "course": "Eagle Ranch", "tee": "blue", "rating": "69.6", "slope": "133" },
+            { "course": "Eaglepoint", "tee": "Gold", "rating": "70.2", "slope": "123" },
+            { "course": "Eaglepoint", "tee": "white", "rating": "68.9", "slope": "117" },
+            { "course": "Elbow Springs M/S", "tee": "blue", "rating": "69.5", "slope": "116" },
+            { "course": "Glen Dornoch", "tee": "White", "rating": "70.2", "slope": "127" },
+            { "course": "Glencoe - Forest", "tee": "White", "rating": "70.4", "slope": "133" },
             { "course": "Gleneagles", "tee": "blue", "rating": "70.2", "slope": "123" },
             { "course": "HG Creek/Hills", "tee": "white", "rating": "68.2", "slope": "119" },
             { "course": "Harvest ", "tee": "blue", "rating": "70.3", "slope": "119" },
             { "course": "Heather Glen Creek/Hills", "tee": "white", "rating": "68.2", "slope": "119" },
-            { "course": "Maple Ridge", "tee": "blue", "rating": "68.8", "slope": "115" },
-            { "course": "Radium Springs", "tee": "Blue", "rating": "69.7", "slope": "120" },
             { "course": "Kamloops G&CC", "tee": "gold", "rating": "70.2", "slope": "122" },
-            { "course": "Red Deer GCC", "tee": "white", "rating": "74.9", "slope": "135" }
+            { "course": "Maple Ridge", "tee": "blue", "rating": "68.8", "slope": "115" },
+            { "course": "Possum Trot", "tee": "White", "rating": "70.4", "slope": "118" },
+            { "course": "Radium Springs", "tee": "Blue", "rating": "69.7", "slope": "120" },
+            { "course": "Red Deer GCC", "tee": "white", "rating": "74.9", "slope": "135" },
+            { "course": "Redwood Meadows", "tee": "Blue/White", "rating": "70,3", "slope": "123" },
+            { "course": "River Spirit", "tee": "Blue/White", "rating": "70.7", "slope": "126" },
+            { "course": "Riverside Fairmont", "tee": "Blue", "rating": "68.5", "slope": "130" },
+            { "course": "Serenity", "tee": "Blue", "rating": "71.1", "slope": "137" },
+            { "course": "Shaftesbury", "tee": "Gold", "rating": "69.5", "slope": "128" },
+            { "course": "Shagannapi", "tee": "blue", "rating": "62.9", "slope": "110" },
+            { "course": "Sirocco", "tee": "blue", "rating": "72.4", "slope": "138" },
+            { "course": "Sirocco", "tee": "white", "rating": "69.7", "slope": "131" },
+            { "course": "St Eugene", "tee": "blue", "rating": "70.4", "slope": "132" },
+            { "course": "Stewart Creek", "tee": "blue", "rating": "71.6", "slope": "127" },
+            { "course": "Stewart Creek", "tee": "blue/white", "rating": "69.5", "slope": "124" },
+            { "course": "The Pearl", "tee": "White", "rating": "69.7", "slope": "126" },
+            { "course": "Tobiano", "tee": "Spur", "rating": "71.9", "slope": "127" },
+            { "course": "Wildstone", "tee": "blue", "rating": "70.6", "slope": "117" },
+            { "course": "Wolf Creek", "tee": "blue", "rating": "67", "slope": "124" },
+            { "course": "shmoobie", "tee": "gree", "rating": "123", "slope": "71.2" }
         ];
 
         db.courses.bulkAdd(COURSES);
-        console.log("click");
-
     };
 
-    const resetDb = () => { db.delete(); }
+
+    const [selectedCourseName, setSelectedCourse] = useState("");
 
     useEffect(() => {
         console.log('in homepage useEffect ' + selectedCourseName);
@@ -137,8 +129,8 @@ function HomePage(props) {
             <button onClick={primeDb}>Insert some data</button>
             <button onClick={resetDb}>Delete all data</button>
 
-            <CourseSelectList onChange={courseSelected} />
-            {courseDetails}
+            <CourseSelectList selectedCourseName={selectedCourseName} onChange={courseSelected} />
+            <CourseTees selectedCourseName={selectedCourseName} />
         </div>
     );
 } // HomePage
@@ -153,17 +145,19 @@ function RoundsPage(props) {
     var tableRows = [];
     for (var i = 0; i < props.rounds.length; i++) {
         tableRows.push(
-            <tr>
-                <td>{props.rounds[i].date}</td>
-                <td>{props.rounds[i].course}</td>
-                <td>{props.rounds[i].tee}</td>
-                <td>{props.rounds[i].score}</td>
-                <td>{props.rounds[i].differential}</td>
-            </tr>
+            (
+                <tr>
+                    <td>{props.rounds[i].date}</td>
+                    <td>{props.rounds[i].course}</td>
+                    <td>{props.rounds[i].tee}</td>
+                    <td>{props.rounds[i].score}</td>
+                    <td>{props.rounds[i].differential}</td>
+                </tr>
+            )
         );
     }
 
-    return (
+    return ((
         <table>
             <thead>
                 <tr>
@@ -178,7 +172,8 @@ function RoundsPage(props) {
                 {tableRows}
             </tbody>
         </table>
-    );
+    ))
+        ;
 } // RoundsPage
 
 
@@ -227,7 +222,7 @@ export function App() {
 
     return (
         <div>
-            <HandicApp rounds={ROUNDS} />,
+            <HandicApp rounds={ROUNDS} />
         </div>
     );
 }
